@@ -1,3 +1,6 @@
 [submodule "third_party/liquidfun"]
 	path = third_party/liquidfun
 	url = https://github.com/google/liquidfun.git
+[submodule "third_party/qml-box2d"]
+	path = third_party/qml-box2d
+	url = https://github.com/adderly/qml-box2d.git
