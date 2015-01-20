@@ -1,3 +1,6 @@
 [submodule "third_party/liquidfun"]
 	path = third_party/liquidfun
 	url = git@github.com:google/liquidfun.git
+[submodule "liquidfun"]
+	path = liquidfun
+	url = https://github.com/google/liquidfun.git

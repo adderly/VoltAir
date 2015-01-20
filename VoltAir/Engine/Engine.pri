@@ -186,7 +186,7 @@ macx {
 # For linux-specific statements, there is a slightly more complex predicate.
 unix:!mac:!android {
     LIBS += \
-        $$LIQUIDFUN_DIR/Box2D/Box2D/Release/libliquidfun.a \
+        $$LIQUIDFUN_DIR/Box2D/Box2D/Release/libliquidfun.a -lrt \
 }
 
 # Have Qt pick up our custom android source
