@@ -588,7 +588,7 @@ UiInternal {
     VoltAirController {
         anchors.fill: parent
 
-        enabled: visible ? (singlePlayerHud.enabled ? true : multiPlayerHud.enabled) : false
+        enabled: visible ? (singlePlayerHud.enabled ? true : multiPlayerHtrud.enabled) : false
         opacity: (singlePlayerHud.opacity > 0) ? singlePlayerHud.opacity : multiPlayerHud.opacity
 
         onPauseRequested: {

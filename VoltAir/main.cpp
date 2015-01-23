@@ -51,6 +51,7 @@
 #include <QDir>
 #include <QtGui/QGuiApplication>
 #include "Game.h"
+#include "editor/editor.h"
 #include "LevelProgression.h"
 #include "LevelProgressionList.h"
 #include "QmlConstants.h"
@@ -182,8 +183,19 @@ int main(int argc, char* argv[]) {
     registerQmlFilesInDir("qml/actors", QML_LIBSTR);
     registerQmlFilesInDir("qml/graphics", QML_LIBSTR);
 
-    Engine::getInstance()->init();
-    Game::getInstance()->init();
+
+    Engine* engine  = Engine::getInstance();
+    engine->setDefaultEngineQml("qml/editor/EditorWidget.qml");
+    engine->setFindRootByName(true);
+    engine->init();
+
+
+    Game* game = Game::getInstance();
+    game->setProgressionLevelPath(QString("qml/VoltAirLevelProgressionList.qml"));
+    game->init();
+
+   // Editor* editor = Editor::getInstance();
+   // Editor::getInstance()->init();
 
     return app.exec();
 }

@@ -38,7 +38,7 @@ Game::Game(QObject* parent)
       mPlayerProfile(this) {
 }
 
-Game::~Game() {
+Game::~Game(){
 }
 
 void Game::init() {
@@ -63,15 +63,18 @@ void Game::init() {
     mDebugMetricsMonitor = mUi->findChild<DebugMetricsMonitor*>("debugMetricsMonitor");
 
     // Read in LevelProgressionList
-    QQmlComponent levelProgressionList(qmlEngine, Util::getUrlPathToAsset(
-                "qml/VoltAirLevelProgressionList.qml"));
+    QQmlComponent levelProgressionList(qmlEngine, Util::getUrlPathToAsset(m_progression_level_path));
     mLevelProgressionList = qobject_cast<LevelProgressionList*>(levelProgressionList.create());
     for (QQmlError error : levelProgressionList.errors()) {
         qDebug() << "Error on Line" << error.line() << ":" << error.description();
     }
-    Q_ASSERT(mLevelProgressionList);
-    mPlayerProfile.setLevelProgressionList(mLevelProgressionList);
-    mUi->setLevelProgressionList(mLevelProgressionList);
+    //Q_ASSERT(mLevelProgressionList);
+
+    if(mLevelProgressionList){
+        mPlayerProfile.setLevelProgressionList(mLevelProgressionList);
+        mUi->setLevelProgressionList(mLevelProgressionList);
+    }
+
 
     // Ui signal connections
     connect(mUi, &UiInternal::activeChanged, this, &Game::onUiActiveChanged);

@@ -44,7 +44,20 @@ public:
      * and making signal/slot connections to the various submodules.
      *
      */
-    void init();
+    virtual void init();
+
+    /***/
+    void setUiPath(QString path){ m_ui_path = path;}
+
+    /***/
+    QString getUiPath(){return m_ui_path;}
+
+    /***/
+    void setProgressionLevelPath(QString path){ m_progression_level_path =path;}
+
+    /***/
+    QString getProgressionLevelPath(){return m_progression_level_path;}
+
     /**
      * @brief Returns if any of the UI screens are active.
      */
@@ -243,6 +256,10 @@ private:
 
     Game(QObject* parent = nullptr);
 
+    //holds the path to the qml ui component.
+    QString m_ui_path;
+    //Should be customizable.
+    QString m_progression_level_path;
     ScoringInfo getScoringInfo() const;
     int getStarScore(int playerScore) const;
     QString getLevelTrackerTag(const QString& eventName) const;

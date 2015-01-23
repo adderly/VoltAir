@@ -57,6 +57,7 @@ const int Engine::PARTICLE_ITERATIONS = 1;
 Engine* Engine::sInstance = nullptr;
 
 Engine::Engine(QObject* parent) : QObject(parent) {
+    m_default_engime_qml = "Engine/qml/main.qml";
 }
 
 Engine::~Engine() {
@@ -73,7 +74,7 @@ void Engine::init() {
 
     // Create window.
     mViewer.reset(new QQuickView());
-    mViewer->setSource(Util::getUrlPathToAsset("Engine/qml/main.qml"));
+    mViewer->setSource(Util::getUrlPathToAsset(m_default_engime_qml));
     mViewer->setResizeMode(QQuickView::SizeRootObjectToView);
 
     // Initially set the window to call glClear for us. This is to prevent an uninitialized frame
@@ -120,12 +121,18 @@ void Engine::init() {
     connect(mViewer.get(), &QQuickView::afterAnimating, this, &Engine::update,
             Qt::DirectConnection);
     connect(mLevelLoader, SIGNAL(loadCompleted(bool)), this, SLOT(onLoadCompleted(bool)));
+    connect(this,SIGNAL(fullScreenChanged()),this,SLOT(onFullScreenChanged()));
 
     mContactListener.reset(new ContactListener());
     mDestructionListener.reset(new DestructionListener());
     mDebugDraw.reset(new LiquidFunDebugDraw());
 
     mIsInitialized = true;
+}
+
+void Engine::setFullscreen(bool showf){
+    mFullscreen = showf;
+    emit fullScreenChanged();
 }
 
 b2World* Engine::getWorld() const {
@@ -137,7 +144,11 @@ QQmlEngine* Engine::getQmlEngine() const {
 }
 
 QQuickItem* Engine::getRoot() const {
-    return mViewer->rootObject();
+    if(m_find_root_by_name){
+        return mViewer->rootObject()->findChild<QQuickItem*>("rootItem");
+    }else{
+        return mViewer->rootObject();
+    }
 }
 
 void Engine::addChildItem(QQuickItem* item) {
@@ -335,8 +346,13 @@ void Engine::updateCamera() {
 }
 
 void Engine::showViewer() {
-    if (mViewer && !mViewer->isVisible()) {
-        mViewer->showFullScreen();
+    if (mViewer && !mViewer->isVisible())
+    {
+        if(mFullscreen){
+            mViewer->showFullScreen();
+        }else{
+            mViewer->show();
+        }
     }
 }
 
@@ -529,4 +545,17 @@ void Engine::onQuitRequested() {
 void Engine::onOpeningCinematicCompleted(const QString& menuBGMTrack) {
     mSoundManager->setBGMTrack(SoundManager::MenuPriority, Util::getPathToSound(menuBGMTrack));
     mSoundManager->setPaused(false);
+}
+
+void Engine::onFullScreenChanged()
+{
+    if(mFullscreen){
+        mViewer->showFullScreen();
+        //mViewer->setWindowState(Qt::WindowFullScreen);
+        //mViewer->setVisible(true);
+    }else{
+        //mViewer->setVisible(true);
+        //mViewer->setWindowState(Qt::WindowNoState);
+        mViewer->showNormal();
+    }
 }

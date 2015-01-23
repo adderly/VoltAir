@@ -90,3 +90,6 @@ include(deployment.pri)
 RESOURCES += \
 
 cache()
+
+DISTFILES += \
+    qml/editor/TopMenuBar.qml

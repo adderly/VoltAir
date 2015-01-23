@@ -191,11 +191,34 @@ public:
      */
     bool isInitialized() const { return mIsInitialized; }
 
+
+    /****/
+    void setDefaultEngineQml(QString path){ m_default_engime_qml = path;}
+
+    /****/
+    QString getDefaultEngineQml(){return m_default_engime_qml;}
+
+    /****/
+    void setFindRootByName(bool byName){m_find_root_by_name = byName;}
+
+    /****/
+    bool getFindRootByName(){return m_find_root_by_name;}
+
     /**
      * @brief Returns @c true if engine is paused, e.g. when the in-game menu is open.
      *
      */
     Q_INVOKABLE bool isPaused() const { return mPausedRefCount != 0; }
+
+    /**
+    *  @brief Set the fullscreen state.
+    */
+    Q_INVOKABLE void setFullscreen(bool showf);
+
+    /**
+    *  @brief returns if the scene is fullscreen.
+    */
+    Q_INVOKABLE bool isFullscreen(){ return mFullscreen;}
 
     /**
      * @brief Returns the Box2D world object.
@@ -444,6 +467,11 @@ public slots:
     void onOpeningCinematicCompleted(const QString& menuBGMTrack);
 
     /**
+    *  @brief slot to respond when fullscreen changed.
+    */
+    void onFullScreenChanged();
+
+    /**
      * @name Android Device Lifecycle slots
      * @{
      * The calling of these methods is not guaranteed but rather contingent upon
@@ -517,6 +545,11 @@ signals:
      * @brief Emitted at the end of the update() call.
      */
     void afterUpdate();
+
+    /**
+    * @brief emit on fullscreen changed.
+    */
+    void fullScreenChanged();
 
     // Signals for forwarding device lifecyle events.
     // See NOTE from device lifecycle slots above.
@@ -619,7 +652,10 @@ private:
     void debugRender();
     void synchronizeForRendering();
 
+    QString m_default_engime_qml;
+    bool m_find_root_by_name;
     bool mIsInitialized = false;
+    bool mFullscreen = true;
     // The game starts paused.
     int mPausedRefCount = 1;
     long long mWorldStepCount = 0;

@@ -92,6 +92,7 @@ HEADERS += \
     $$PWD/utils/QmlUtil.h \
     $$PWD/utils/Util.h \
     $$PWD/utils/VariantConverter.h \
+    $$PWD/editor/editor.h
 
 SOURCES +=  \
     $$PWD/../../third_party/poly2tri/poly2tri/common/shapes.cc \
@@ -149,6 +150,7 @@ SOURCES +=  \
     $$PWD/utils/GraphicsUtil.cpp \
     $$PWD/utils/QmlUtil.cpp \
     $$PWD/utils/Util.cpp \
+    $$PWD/editor/editor.cpp
 
 android {
     HEADERS += \
