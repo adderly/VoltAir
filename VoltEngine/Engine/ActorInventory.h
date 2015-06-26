@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+class Actor;
 class ActorWeapon;
 class Pickable;
 
@@ -85,12 +86,26 @@ protected:
     //std::list<Weapon*>   mWeaponsAvailable;
 };
 
+Q_DECLARE_METATYPE(ActorInventory*)
 
 /**
-*   @brief
+*   @brief Simple struct containing the information for representing
+*   a Pickable item, which will reference by an id to the specific
+*   powerup or upgrade. Which will be contained in the parent Actor
+*   type as a child if the referenceTypeId is 0 (zero).
+*
+*   @note The Pickable.available property is used to check wheter the actor can pick up
+*   this Pickable. If the Pickable has a logic that might trigger its availability.
+*   The Pickable.picked is used to know wheter its been picked up by an actor.
+*   The Pickable.name name for the pickable.
+*   The Pickable.type identifies what type of pickable it is.
+*   The Pickable.restriction is used on logics and power ups.
 */
-class Pickable{
+class Pickable: public QObject{
+    Q_OBJECT
 public:
+    explicit Pickable(QObject* parent = nullptr){}
+
     enum Type:unsigned int{
         NONE,
         POWER_UP,
@@ -99,19 +114,29 @@ public:
         WEAPON_ENHANCEMENT
     };
 
+    virtual void onPickedByActor(Actor* pickedBy){
+        Q_UNUSED(pickedBy)
+    }
+
     enum Restriction:unsigned int{
-        TIME,
+        TIME = 1,
         USE_COUNT
     };
 
-    int powerValue;
-    Type type;
-    Restriction restriction;
+
+    int id;
+    int referencedType;
+    bool available;
+    bool picked;
     QString name;
+    Type type = NONE;
+    Restriction restriction;
+    Actor* parent = nullptr;
 };
 
+Q_DECLARE_METATYPE(Pickable*)
 
 
 
-Q_DECLARE_METATYPE(ActorInventory*)
+
 #endif // ACTORINVENTORY_H

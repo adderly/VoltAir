@@ -30,7 +30,7 @@
                 <!--<category android:name="android.intent.category.LEANBACK_LAUNCHER"/> -->
             </intent-filter>
 
-            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <meta-data android:name="android.app.lib_name" android:value="MedievalGladiator"/>
             <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
             <meta-data android:name="android.app.repository" android:value="default"/>
             <meta-data android:name="android.app.qt_libs_resource_id" android:resource="@array/qt_libs"/>
@@ -68,4 +68,5 @@
 
 <!-- %%INSERT_PERMISSIONS -->
 <!-- %%INSERT_FEATURES -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 </manifest>

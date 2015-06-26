@@ -207,10 +207,12 @@ void InputArea::mouseEventFromUi(const QEvent *e)
     Camera* camera = Engine::getInstance()->getCamera();
     QPoint epos = event->pos();
     QPointF worldCoords = camera->mapFromItem(this,QPointF(event->pos()));
+    QPointF worldPos = camera->toWorldSpace(QPointF(epos));
     QQuickItem* item = childAt(worldCoords.x(),worldCoords.y());
 
 
     qDebug() <<"MouseX "<< event->x() << " MouseY " << event->y();
+    qDebug() <<"WorldX "<< worldPos.x() << " WorldY " << worldPos.y();
     qDebug() <<"MouseWorldX "<< worldCoords.x() << " MouseWorldY " << worldCoords.y();
 //    for(ResizeControl* actor: findChildren<ResizeControl*>()){
 //        if(actor->position().toPoint() == worldCoords.toPoint()){

@@ -141,6 +141,10 @@ public:
      * transform.
      */
     void applyTransform();
+    /**
+    *  @brief Transform the point to world pos.
+    */
+    QPointF toWorldSpace(const QPointF& point) const;
 
 signals:
     /**
@@ -173,7 +177,6 @@ protected:
     virtual QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data) override;
 
 private:
-    QPointF toWorldSpace(const QPointF& point) const;
     void updateOpenGLViewMatrix();
 
     float mFov = 1.0f;

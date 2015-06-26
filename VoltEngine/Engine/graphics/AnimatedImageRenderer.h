@@ -18,7 +18,7 @@
 #define ANIMATEDIMAGERENDERER_H
 
 #include "ImageRenderer.h"
-
+#include "AnimatedImageClip.h"
 /**
  * @ingroup Engine
  * @ingroup QQuickItem
@@ -31,10 +31,10 @@
  * This class is used for various animations in the game, including the Orb collectables, and
  * the Portal animations.
  *
- * Note: If the FrameAmount is changes after the component is initialized, it might have
+ * @note: If the FrameAmount is changes after the component is initialized, it might have
  *  weird behavior.
  *
- * TODO: clip comments.
+ * TODO: FINISH the work with the strips from a subtexture provided with the Texture Packer loader.
  * TODO: fix the calculations done with the width of the texture to count the frames.
  * Ideally the width and/or height should be specified to determine the frames in the texture.
  * TODO: add texture packer loader. And animation from them.
@@ -46,10 +46,16 @@
 // TODO: Supporting grid layouts for texture sheets would allow larger animations to fit into the
 // texture sheets within the size limitations of more hardware.
 
-class AnimatedImageClip;
+class TexturePackerLoader;
 
-class AnimatedImageRenderer : public ImageRenderer {
+class AnimatedImageRenderer : public ImageRenderer
+{
     Q_OBJECT
+
+    /**
+    * @brief Propety holding the jsonfilename if specified.
+    */
+    Q_PROPERTY(QString jsonFilename READ getJsonFilename WRITE setJsonFilename NOTIFY jsonFilenameChanged)
     /**
      * @brief Pause this animation at the current frame.
      */
@@ -103,7 +109,7 @@ class AnimatedImageRenderer : public ImageRenderer {
     Q_PROPERTY(QString defaultClip READ getDefaultClip WRITE setDefaultClip)
 
     /**
-    *
+    * @brief Defines whether the strip is horizontal or not.
     */
     Q_ENUMS(StripOrientation)
 
@@ -112,11 +118,22 @@ public:
         HORIZONTAL = 0,
         VERTICAL
     };
+
     /**
      * @brief Construct a AnimatedImageRenderer.
      * @param parent Parent item
      */
     explicit AnimatedImageRenderer(QQuickItem* parent = nullptr);
+
+    /**
+    *   @brief Returns the #jsonFilename.
+    */
+    QString getJsonFilename() const { return mJsonfilename; }
+
+    /**
+    *   @brief Sets the #jsonFilename.
+    */
+    void setJsonFilename(QString filename);
 
     /**
      * @brief Returns #paused.
@@ -138,15 +155,13 @@ public:
     void setLooped(bool value);
 
     /**
-    * @brief
+    * @brief Sets the #stripOrientation.
     */
     void setStripOrientation(StripOrientation value);
-
     /**
-    * @brief
+    * @brief Returns the strip orientation.
     */
     StripOrientation getStripOrientation() const { return mStripOrientation ;}
-
     /**
      * @brief Returns #useGameTime.
      */
@@ -203,14 +218,19 @@ public:
     void setPauseWhenHidden(bool value);
 
     /**
-    * @brief
+    * @brief Sets the clips for the renderer.
     */
     void setClips(const QList<AnimatedImageClip*>& c);
 
     /**
-    * @brief
+    * @brief Sets the clips for the renderer.
     */
-    const QList<AnimatedImageClip*>& getClips() const;
+    void setClips(const QMap<QString,AnimatedImageClip*>& c);
+
+    /**
+    * @brief Returns the mClips.
+    */
+    const QMap<QString,AnimatedImageClip*>& getClips() const;
 
     /**
     * @brief
@@ -219,7 +239,8 @@ public:
     void setClipsFromVariantList(const QVariantList& c);
 
     /**
-    * @brief
+    * @brief Return the clips as variant list.
+    * @note used with the goodies of qml.
     */
     QVariantList getClipsAsVariantList() const;
 
@@ -227,7 +248,6 @@ public:
     *   @brief Find a clip by name, then set it as current.
     */
     Q_INVOKABLE void setCurrentClipByName(QString clipName);
-
 
     /**
     *   @brief Set the DefaultClip.
@@ -284,6 +304,10 @@ signals:
     *   @brief Emitted when default clip changed.
     */
     void defaultClipChanged();
+    /**
+    *   @brief Emitted when the #Jsonfile changes.
+    */
+    void jsonFilenameChanged();
 
 protected:
     virtual void synchronizeForRendering(RenderList* renderList) override;
@@ -305,15 +329,15 @@ private:
     void updateAnimation();
 
     //Texture Packer loader
-    QString mFilename;
-
-
+    QString mJsonfilename;
+    AnimatedImageClip::ClipType clipType = AnimatedImageClip::STRIP;
 
     //clip support
     QString mDefaultClip = "default";
     float mCurrentClipDelay = 0.0f;
+    bool mFrameRotation = false;//when the image is rotated in the texturepacker
     AnimatedImageClip* mCurrentClip = nullptr;
-    QList<AnimatedImageClip*> mClips;
+    QMap<QString,AnimatedImageClip*> mClips;
 
     StripOrientation mStripOrientation = StripOrientation::VERTICAL;
     bool mPaused = false;

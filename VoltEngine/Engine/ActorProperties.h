@@ -21,7 +21,6 @@ class ActorProperties:public QObject
 
     Q_PROPERTY(float health READ health WRITE setHealth NOTIFY healthChanged)
     Q_PROPERTY(float maxSpeed READ maxSpeed WRITE setMaxSpeed NOTIFY maxSpeedChanged)
-    Q_PROPERTY(unsigned int clan READ clan WRITE setClan)
 
 public:
     ActorProperties(QObject* parent = nullptr);
@@ -64,17 +63,6 @@ public:
     */
     QPointF forwardVector() {  return mForwardVector;  }
 
-    /**
-    *   @brief Sets the clan.
-    */
-    void setClan(unsigned int c);
-
-    /**
-    *   @brief Returns the clan.
-    */
-    unsigned int clan() {  return mClan;  }
-
-    unsigned int mClan = 0;
     float mHealth = 0.0f;
     float mMaxSpeed = 0.0f;
     QPointF mForwardVector;

@@ -42,6 +42,12 @@ public:
     Q_INVOKABLE QUrl getUrlPathToAsset(const QString& assetPath);
 
     /**
+     * @brief Returns platform dependent path URL to @p levelPath.
+     * @param levelPath Path of asset to resolve.
+     */
+    Q_INVOKABLE QString getPathToLevel(const QString& levelPath);
+
+    /**
      * @brief Returns the platform dependent path to the font in @p fontPath.
      * @param fontPath Path of font to resolve
      */

@@ -30,6 +30,10 @@ QUrl QmlUtil::getUrlPathToAsset(const QString& assetPath) {
     return Util::getUrlPathToAsset(assetPath);
 }
 
+QString QmlUtil::getPathToLevel(const QString& levelPath){
+     return Util::getPathToLevel(levelPath);
+}
+
 QString QmlUtil::getPathToFont(const QString& fontPath) {
     return Util::getPathToFont(fontPath);
 }

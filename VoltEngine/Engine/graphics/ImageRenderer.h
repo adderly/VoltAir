@@ -42,6 +42,10 @@ class ImageRenderer : public Graphic, public RenderableInterface {
     Q_OBJECT
 
     /**
+    *   @brief Identifies whether the image should be render in the center.
+    */
+    Q_PROPERTY(bool centered READ centered WRITE setCentered NOTIFY centeredChanged)
+    /**
      * @brief Override of QQuickItem's visible property to set visibility.
      * @note This is done to preserve the convention of using @c visible to control visibility.
      * Internally we set @c QQuickItem's @c visible property, and @c visible is not @c virtual, so
@@ -90,6 +94,16 @@ public:
      */
     explicit ImageRenderer(QQuickItem* parent = nullptr);
     virtual ~ImageRenderer();
+
+    /**
+    *   @brief Return #centered.
+    */
+    bool centered() const { return mCentered; }
+
+    /**
+    *   @brief Sets #centered.
+    */
+    void setCentered(bool value);
 
     /**
      * @brief Returns #visible.
@@ -163,6 +177,10 @@ public:
 
 signals:
     /**
+     * @brief Emitted when #centered changes.
+     */
+    void centeredChanged();
+    /**
      * @brief Emitted when #visible changes.
      */
     void visibleChanged();
@@ -235,6 +253,7 @@ private:
     void updateVisibility();
     void checkBody();
 
+    bool mCentered = false;
     bool mVisible = true;
     bool mWasVisible = true;
     bool mCacheRenderParams = false;

@@ -74,12 +74,17 @@ public:
      * @brief Associated physics Body, if it exists.
      */
     Q_PROPERTY(Body* body READ getBody)
-
     /**
-    *   @brief
+    *   @brief The ActorInventory is a mechanism used to allow the Actor to have an easier way to
+    * handle items.
     */
     Q_PROPERTY(ActorInventory* inventory READ getInventory WRITE setInventory)
-
+    /**
+    *   @brief Variable used to control whether the actor indexes its children after completion.
+    *   @note This is usefull when parsing LevelNodes in the Level loading process,
+    *    is a way to not allow the execution twice.
+    */
+    Q_PROPERTY(bool IndexOnComplete READ indexOnComplete WRITE setIndexOnComplete)
     /**
      * @brief Constructs an Actor, with a body.
      */
@@ -99,6 +104,11 @@ public:
      * @brief Returns #body.
      */
     Body* getBody() const;
+
+    /**
+    *   @brief  Sets the body as a child then index it.
+    */
+    void setBody(Body* body);
 
     /**
     *  @brief Gets the actor propeties;
@@ -123,6 +133,16 @@ public:
     bool hasInventory() {  return mInventory != nullptr;  }
 
     /**
+    *   @brief Sets the indexOnComplete variable.
+    */
+    void setIndexOnComplete(bool value);
+
+    /**
+    *   @brief Return the indexOnComplete value.
+    */
+    bool indexOnComplete() {  return mIndexOnComplete;  }
+
+    /**
      * @brief Look through our subtree and find a child which is of the type, or a subtype of the
      * type named by string.
      *
@@ -130,6 +150,11 @@ public:
      * @param typeName Name of the type to look for
      */
     Q_INVOKABLE QObject* findChildByTypeName(const QString& typeName);
+
+    /**
+    *   @brief Returns the ActorType from the owner of the body.
+    */
+    static bool isActorTypeFromBody(Body* body,ActorType type);
 
 signals:
     /**
@@ -154,6 +179,7 @@ private:
     AILogicManager*  mLogicManager = nullptr;
     ActorProperties* mProperties = nullptr;
     ActorInventory*  mInventory = nullptr;
+    bool             mIndexOnComplete = true;
 };
 Q_DECLARE_METATYPE(Actor*)
 

@@ -117,6 +117,7 @@ public class VoltAirActivity extends QtActivity implements InputManager.InputDev
     // are not considered a failure, but it is for us
     private boolean mSignInFailed = false;
     private boolean mSyncing = false;
+    private boolean mGpServicesRequired = false;
     // Data to save to cloud when connection is established
     private String mBufferedCloudData = null;
     private HashSet<String> mRevealedAchievements = null;
@@ -174,7 +175,10 @@ public class VoltAirActivity extends QtActivity implements InputManager.InputDev
         mSoundManager.onStart(this);
 
         onApplicationStart();
-        mPlayServicesHelper.onStart(this);
+
+        if(mGpServicesRequired){
+            mPlayServicesHelper.onStart(this);
+        }
     }
 
     /**
@@ -214,7 +218,9 @@ public class VoltAirActivity extends QtActivity implements InputManager.InputDev
         mSoundManager.onStop();
 
         onApplicationStop();
-        mPlayServicesHelper.onStop();
+        if(mGpServicesRequired){
+            mPlayServicesHelper.onStop();
+        }
     }
 
     /**
@@ -235,6 +241,24 @@ public class VoltAirActivity extends QtActivity implements InputManager.InputDev
     @Override
     public void onActivityResult(int requestCode, int responseCode, Intent data) {
         mPlayServicesHelper.onActivityResult(requestCode, responseCode, data);
+        if(mGpServicesRequired){
+        }else{
+            super.onActivityResult(requestCode,responseCode,data);
+        }
+    }
+
+    /**
+    * @brief
+    */
+    public void setGPServicesRequired(boolean value) {
+        mGpServicesRequired = value;
+    }
+
+    /**
+    * @brief
+    */
+    public boolean isGPServiceRequired(){
+        return mGpServicesRequired;
     }
 
     /**

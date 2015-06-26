@@ -2,31 +2,48 @@
 #define TEXTUREPACKERLOADER_H
 
 #include<QObject>
-#include<QFile>
-#include<QFileInfo>
 #include<QJsonDocument>
+#include<QRect>
+#include<QMap>
 #include"LoaderInterface.h"
 
+class QString;
 /**
 *   @brief Struct containing the required information for a loaded frame.
 */
 struct TexturePackerImage{
-    int textureId;//used to identify in which texture to find this.
-    bool rotated, trimmed;
-    int frame[4];
-    int image_rect[4];
-    float pivot[2];
+    int   textureId;//used to identify in which texture to find this.
+    bool  rotated, trimmed;
     QString name;
+    QRect frame;
+    QRect sprite_src_size;
+    int   sourceSize[2];
+    float pivot[2];
+};
+typedef TexturePackerImage TP_Image;
+
+/**
+*   Useful meta information.
+*/
+struct TexturePackerMetadata{
+    QString image_name;
+    QString image_path;
+    QString image_format;
+    int size[2];
+    float scale;
+    QMap<QString,TP_Image*> m_images;
 };
 
-typedef TexturePackerImage TP_Image;
+typedef TexturePackerMetadata TP_Document;
+
+
 /**
 *   @brief A loader for TexturePacker Json file.
 *   @note TexturePacker can export spritesheets as a .json file structure
 *         for frames.
 *
 *   TODO:
-*   - Complete parser of the json file.
+*   - Add checks for properties needed of the file.
 *   - Add some kind of cache for loaded textures.
 *   - Add simple image provider for using this images anywhere in the qml environment.
 *     which will required a custom qml item, in which the texture will be rendered.
@@ -36,60 +53,20 @@ class TexturePackerLoader: public QObject
 {
     Q_OBJECT
 public:
-    explicit TexturePackerLoader(QObject* parent = nullptr);
     virtual ~TexturePackerLoader();
 
     /**
-    *   @brief
+    *   @brief returns the loaded TP_Document, if chached returns the cached one.
     */
-    void setFilename(QString value);
+    TP_Document* getTPDocument(const QString& name);
 
-    /**
-    *   @brief
-    */
-    QString filename()  {  return m_filename;  }
-
-    /**
-    *   @brief Loads the specified json file.
-    */
-    bool load();
-
-    /**
-    *   @brief
-    */
-    bool load(QString filename);
-
-    /**
-    *   @brief Return the error code, if any after loading the file.
-    */
-    uint errorCode();
-
-    /**
-    *   @brief Returns whether the file is loaded or not.
-    */
-    bool isLoaded();
-
-    /**
-    *   @brief Return the frame's container.
-    */
-    std::vector<TP_Image*>& getFrames() { return m_loaded_frames;  }
-
-signals:
-    void filenameChanged();
+    static TexturePackerLoader* getInstance();
 
 private:
+    TexturePackerLoader(QObject* parent = nullptr);
 
-    /**
-    *   @brief Internal function where the frames are loaded.
-    */
-    void readFrames();
-
-    bool m_ok;
-    uint m_error_code = stateless_error;
-    QString m_error_string;
-    QString m_filename;
-    QJsonDocument m_json;
-    std::vector<TP_Image*> m_loaded_frames;
+    static TexturePackerLoader* mInstance;
+    QMap<QString,TP_Document*>  mCachedDocs;
 };
 
 #endif // TEXTUREPACKERLOADER_H

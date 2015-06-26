@@ -33,7 +33,7 @@
 class ParticleLayer;
 class ParticleRendererItem;
 class b2World;
-
+class LevelNode;
 /**
  * @ingroup Engine
  * @brief Representation of an in-game level.
@@ -50,6 +50,19 @@ class b2World;
  * Aside from containing Actor%s, the Level is responsible for maintaining some of the state that is
  * global to the Level, such as the intensity of gravity. The Level is also the owner of the physics
  * world (@c b2World).
+ *
+ * @note When loading from the Rube json format, there are two ways of handling actors:
+ *      1 - Using LevelNode objects to specify level objects.
+ *      2 - Using category mapping, which means that the object from the rube loader
+ *      comes with a property defining which type of actor it represents. With this objects
+ *      are automatically instantiated using the object.property mapped with the Actor it needs.
+ *      It is done using a customProperty (actorType), in the bodies comming from
+ *      The mapping is done in a mLevelActorMapping in the Level.
+ *      Example:
+ *      levelActorMapping:[
+ *        {     "enemy":"qml/game/actors/Enemy.qml"      }
+ *      ]
+ *
  */
 class Level : public QQuickItem {
     Q_OBJECT
@@ -132,6 +145,15 @@ class Level : public QQuickItem {
      */
     Q_PROPERTY(int completionThreshold READ getCompletionThreshold WRITE setCompletionThreshold
             NOTIFY completionThresholdChanged)
+    /**
+    * @brief
+    */
+    Q_PROPERTY(QVariantList registeredActors READ registeredActors WRITE setRegisteredActors
+           NOTIFY registeredActorsChanged)
+    /**
+    *   @brief
+    */
+    Q_PROPERTY(QVariantList levelActorMapping READ levelActorMapping WRITE setLevelActorMapping )
     /**
      * @brief Helper property to find the Portal for this Level.
      */
@@ -286,6 +308,22 @@ public:
      */
     void setCompletionThreshold(int value);
     /**
+    * @brief Returns the registeredActors variable.
+    */
+    QVariantList registeredActors() {  return mRegisteredActors;  }
+    /**
+    * @brief Sets the registeredActors variable.
+    */
+    void setRegisteredActors(QVariantList& registered);
+    /**
+    *   @brief
+    */
+    QVariantList levelActorMapping() {  return mLevelActorMapping;  }
+    /**
+    *   @brief
+    */
+    void setLevelActorMapping(QVariantList& value);
+    /**
      * @brief Returns #portal.
      */
     Actor* getPortal() const { return mPortal; }
@@ -322,13 +360,14 @@ public:
     */
     void setLevelType(LevelType &type);
     /**
-    * @brief
+    * @brief Sets the variable mouseToInputArea.
     */
     void setMouseToInputArea(bool value);
     /**
-     * @brief
+     * @brief Returnt the value of the variable mouseToInputArea.
      */
     bool mouseToInputArea() const { return mMouseToInputArea;}
+
 signals:
     /**
      * @brief Emitted when #cameraBoundary changes.
@@ -390,11 +429,15 @@ signals:
     * @brief Emitted when #changeByInput Changes.
     */
     void mouseToInputAreaChanged();
+    /**
+    * @brief Emitted when registered actors changes.
+    */
+    void registeredActorsChanged();
 
 protected:
     /**
-     * @brief Post-initialization of the Level after all child Actor%s have been created and set.
-     */
+    * @brief Post-initialization of the Level after all child Actor%s have been created and set.
+    */
     virtual void componentComplete() override;
     /**
     * @brief Use to handle managed level.
@@ -404,6 +447,35 @@ protected:
     * @brief Use to handle loading box2djson format.
     */
     inline void rubeB2DLevel(b2dJson &mBox2dJson);
+
+    //Level Parsing functions.
+    /**
+    *   @brief
+    *   @note This should be only used in the level parsing method,
+    *        because it does not check for required variables.
+    *       It assumes they are there. Beware!
+    */
+    inline void actorComponentWithBody(LevelNode* node, QQmlEngine* qmlEngine);
+    /**
+    *   @brief This is used for creating Actors directly from the rube json object.
+    *       Using the actorType property.
+    */
+    inline void actorFromMapping(b2Body* body, std::string& actorType, QQmlEngine* qmlEngine);
+    /**
+    *   @brief  This is used when an Actor references directly to b2body by name.
+    */
+    inline void actorReferenceBody(LevelNode* node);
+    /**
+    *   @brief This is used by methods used for creating and Actor from qml file and assigning it a Body.
+    *   @note initLogic param is used by default, in case the created actors have some logic that
+    *   initialized resources after creation. This is purely needed most times.
+    */
+    inline Actor* createActorComponentWithBody(b2Body* tbody,QString& actorQmlComponent,QQmlEngine* qmlEngine,bool initLogics = true);
+    /**
+    *   @brief This checks if the b2Body has been initialized as a Body.
+    *   if it has it returns that if not it init and returns it.
+    */
+    Body* checkBodyOrInit(b2Body* b);
 
 private:
     void updateParticleRendererItemZ();
@@ -416,6 +488,10 @@ private:
     QString mFileName;
     QString mJsonData;
     QString mJsonFilePath;
+    QVariantList mRegisteredActors;
+    QVariantList mLevelActorMapping;
+    QMap<QString,QString> mLevelActorMap;
+
     std::unique_ptr<b2World> mWorld;
     QMap<Actor::ActorType, QSet<Actor*>> mActors;
     int mStartingNumPickups = 0;

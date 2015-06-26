@@ -47,7 +47,7 @@ public:
 
     /**
      * @brief Returns a Texture containing the image at @p assetPath relative to the standard asset
-     * directory.
+     * DirectTextureory.
      * @param assetPath Path of image to get
      */
     TexturePtr getTextureAsset(const QString& assetPath);

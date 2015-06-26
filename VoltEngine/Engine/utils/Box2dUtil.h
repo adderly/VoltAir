@@ -85,6 +85,23 @@ static inline b2ParticleColor toB2ParticleColor(const QColor& color) {
     return b2ParticleColor(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 }
 
+//  Collision filtering utils, lazy but handy.
+
+/**
+*  @brief Collides with all except the ones supplied.
+*/
+static inline unsigned int collideWithAllBut(unsigned int &flag) {
+    return ~flag;
+}
+
+/**
+*  @brief Check if the objects can collide;
+*/
+static inline bool canCollide(unsigned int &a, unsigned int &b){
+    return (a & b) != 0;
+}
+
+
 }
 
 #endif // BOX2DUTIL_H

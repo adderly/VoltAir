@@ -22,8 +22,3 @@ void ActorProperties::setMaxSpeed(float s){
     emit maxSpeedChanged();
 }
 
-void ActorProperties::setClan(unsigned int c)
-{
-    mClan = c;
-}
-

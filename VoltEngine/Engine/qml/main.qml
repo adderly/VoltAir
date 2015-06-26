@@ -28,6 +28,12 @@ Rectangle {
     // Background must be transparent in order to render our scene behind it.
     color: "transparent"
 
+//    Rectangle{
+//        anchors.centerIn: parent
+//        color: "red"
+//        width: 200
+//        height: 180
+//    }
     Camera {
         id: camera
         anchors.fill: parent

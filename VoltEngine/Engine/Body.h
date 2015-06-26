@@ -25,13 +25,15 @@
 #include <functional>
 #include <queue>
 class Actor;
+class ContactManifold;
 class Joint;
 class b2Body;
 class b2Fixture;
 class b2Shape;
+class b2Contact;
+struct b2Manifold;
 struct b2BodyDef;
 struct b2FixtureDef;
-
 /**
  * @ingroup Engine
  * @brief A QObject container for a Box2D @c b2Body.
@@ -53,10 +55,16 @@ struct b2FixtureDef;
  * callbacks), a separate queuing mechanism must be used (e.g. queuing the contact callback, which
  * is already done automatically in C++ and required in QML).
  *
+ * @note Regarding Body.mCategoryBits and Body.mMaskBits: This are used to filter the collisions
+ * between box2d bodies. the category means the collision id, and mask means the objects the body
+ * can collide with.
+ *
  * TODO: There is some confusing stuff regarding the manual initialization implementation.
  *       By Default bodies are created static. Unless you specified the manualInitialization
  *       which actually recreates the body (-__-).
- * TODO: Add filtering properties on creation.
+ * TODO: Some properties are based on the Body object which are supposed to be the same in its
+ *       b2body but if the body was created externally, like with the rubeloader this might be
+ *       incorrent.
  */
 class Body : public QObject {
     Q_OBJECT
@@ -141,6 +149,11 @@ class Body : public QObject {
      */
     Q_PROPERTY(float magneticStrength READ getMagneticStrength WRITE setMagneticStrength
             NOTIFY magneticStrengthChanged)
+
+    /**
+    *   @brief Whether this body has fixed rotation or not.
+    */
+    Q_PROPERTY(bool fixedRotation READ fixedRotation WRITE setFixedRotation NOTIFY fixedRotationChanged)
 
     /**
     *   @brief Whether this body is a bullet or not.
@@ -307,9 +320,19 @@ public:
     float initialY() {  return mInitialY;  }
 
     /**
-     * @brief Returns #actor.
-     */
+    * @brief Returns #actor.
+    */
     Actor* getActor() const;
+
+    /**
+    * @brief  Sets #mContactManifold.
+    */
+    void setContactManifold(ContactManifold* cont);
+
+    /**
+    * @brief Returns the #mContactManifold.
+    */
+    ContactManifold* getContactManifold() const { return mContactManifold; }
 
     /**
     *   @brief Return #maskBits.
@@ -420,6 +443,16 @@ public:
      * @param value Float to set #magneticStrength to
      */
     void setMagneticStrength(float value);
+
+    /**
+    * @brief Returns the fixed rotation for the body def.
+    */
+    bool fixedRotation() {  return mFixedRotation;  }
+
+    /**
+    * @brief Sets the fixed rotation variable for the body.
+    */
+    void setFixedRotation(bool value);
 
     /**
     *   @brief Returns #bullet.
@@ -623,7 +656,7 @@ public:
     /**
      * @brief Returns #ManualInitialization.
      */
-    bool manualInitialization() { return mManualInitilization; }
+    bool manualInitialization() {  return mManualInitilization;  }
 
     /**
      * @brief Set created from b2body.
@@ -688,7 +721,12 @@ public:
     *   @brief Used when parsing the world from other source.
     *   @note  Used when parsing a plain b2Body.
     */
-    static Body* BodyFromb2Body(b2Body* body);
+    static Body* BodyFromb2Body(b2Body* body,bool actorLess = true) ;
+
+    /**
+    *   @brief Used for solving collision with some kind of objects.
+    */
+    static void preSolveContact(b2Contact* contact, const b2Manifold* oldManifold);
 
 protected:
     /**
@@ -741,6 +779,11 @@ signals:
      * @brief Emitted when #magnetic changes.
      */
     void magneticChanged();
+
+    /**
+    *   @brief Emitted wgeb #fixedRotation chanegs.
+    */
+    void fixedRotationChanged();
 
     /**
     *   @brief Emitted when #bullet changes.
@@ -867,14 +910,16 @@ private:
     b2Body* mBody = nullptr;
     unsigned short mCategoryBits = 0x0001;
     unsigned short mMaskBits = 0xFFFF;
-    int   mGroupIndex = 0;
+    int  mGroupIndex = 0;
     bool mFixturesDirty = true;
     bool mTransformDirty = true;
+    ContactManifold *mContactManifold = nullptr;
 
     //Force to init manually
     bool mManualInitilization = false;
     bool mCreatedFromB2Body = false;
     bool mMagnetic = false;
+    bool mFixedRotation = false;
     bool mBullet = false;
     float mMagneticStrength = 1.0f;
 
@@ -889,9 +934,6 @@ private:
     QMap<Body*, int> mContactCountMap;
     QList<Joint*> mJoints;
 };
-
-
-
 Q_DECLARE_METATYPE(Body*)
 
 #endif // BODY_H

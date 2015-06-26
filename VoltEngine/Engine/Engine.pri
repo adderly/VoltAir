@@ -115,7 +115,8 @@ HEADERS += \
     $$PWD/ActorProperties.h \
     $$PWD/logics/WaveLogic.h \
     $$PWD/ActorInventory.h \
-    $$PWD/gamenodes/PlayerInventory.h
+    $$PWD/gamenodes/PlayerInventory.h \
+    $$PWD/utils/levelnode.h
 
 SOURCES +=  \
     $$PWD/../../third_party/poly2tri/poly2tri/common/shapes.cc \
@@ -186,7 +187,8 @@ SOURCES +=  \
     $$PWD/ActorProperties.cpp \
     $$PWD/logics/WaveLogic.cpp \
     $$PWD/ActorInventory.cpp \
-    $$PWD/gamenodes/PlayerInventory.cpp
+    $$PWD/gamenodes/PlayerInventory.cpp \
+    $$PWD/utils/levelnode.cpp
 
 android {
     QT += androidextras
@@ -212,17 +214,16 @@ android {
         $$PWD/android/deploy/src/com/google/fpl/utils/GooglePlayServicesHelper.java \
         $$PWD/android/deploy/src/com/google/fpl/utils/SoundManager.java \
 
-
+#TODO add other archs libraries.
     equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
-        LIBS += \
-            $$LIQUIDFUN_DIR/Box2D/obj/local/armeabi-v7a/libliquidfun_static.a \
-        }
-        equals(ANDROID_TARGET_ARCH, armeabi) {
-        }
-        equals(ANDROID_TARGET_ARCH, x86)  {
-        LIBS += \
-            $$LIQUIDFUN_DIR/Box2D/obj/local/x86/libliquidfun_static.a \
-        }
+        LIBS += $$LIQUIDFUN_DIR/Box2D/obj/local/armeabi-v7a/libliquidfun_static.a
+    }
+    equals(ANDROID_TARGET_ARCH, armeabi) {
+        LIBS += $$LIQUIDFUN_DIR/Box2D/obj/local/x86/libliquidfun_static.a
+    }
+    equals(ANDROID_TARGET_ARCH, x86)  {
+        LIBS += $$LIQUIDFUN_DIR/Box2D/obj/local/x86/libliquidfun_static.a
+    }
 
     QMAKE_CXXFLAGS_WARN_ON += -Wno-pragmas
 }
@@ -233,8 +234,11 @@ macx {
 
 # For linux-specific statements, there is a slightly more complex predicate.
 unix:!mac:!android {
-    LIBS += \
-        $$LIQUIDFUN_DIR/Box2D/Box2D/Release/libliquidfun.a -lrt \
+    CONFIG(debug, debug|release) {
+        LIBS += $$LIQUIDFUN_DIR/Box2D/Box2D/Debug/libliquidfun.a -lrt \
+    }else{
+        LIBS += $$LIQUIDFUN_DIR/Box2D/Box2D/Release/libliquidfun.a -lrt \
+    }
 }
 
 # Have Qt pick up our custom android source

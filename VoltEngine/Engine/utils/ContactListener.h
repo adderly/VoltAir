@@ -40,9 +40,17 @@ public:
      * @param contact Contact between both bodies
      */
     virtual void EndContact(b2Contact* contact) override;
-
-private:
+    /**
+    *   @brief Implementation for identify Bodies which need  special
+    *   contact solving. Like when a body is hit by a sword, or bullet.
+    */
+    virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+    /**
+    *   @brief Gets the Body from the fixture.
+    */
     static Body* getBodyFromFixture(const b2Fixture* fixture);
+private:
+
 };
 
 

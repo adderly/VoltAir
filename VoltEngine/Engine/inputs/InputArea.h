@@ -66,13 +66,13 @@ public:
     explicit InputArea(QQuickItem* parent = 0);
 
     /**
-     * @brief Returns the KeyCode that corresponds @c Qt::Key code.
-     * @param qtKeyCode @c Qt::Key code to convert
-     */
+    * @brief Returns the KeyCode that corresponds @c Qt::Key code.
+    * @param qtKeyCode @c Qt::Key code to convert
+    */
     static KeyCode convertQtKeyCode(int qtKeyCode);
 
     /**
-    *
+    * @brief
     */
     void mouseEventFromUi(const QEvent* event);
 
@@ -93,7 +93,6 @@ protected:
      * @param event Key release event to handle
      */
     virtual void keyReleaseEvent(QKeyEvent* event) override;
-
     /**
     * @brief
     */
@@ -106,7 +105,6 @@ protected:
     * @brief
     */
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
-
     /**
     * @brief
     */
@@ -117,8 +115,13 @@ protected:
     virtual void wheelEvent(QWheelEvent* event) override;
 signals:
 
+    /**
+    *   @brief
+    */
     void mouseWheelChanged(QPoint pixels ,QPoint degrees);
-
+    /**
+    *   @brief
+    */
     void mouseMovedChanged(QPoint pos ,QPoint delta);
 
 private:

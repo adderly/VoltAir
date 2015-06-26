@@ -230,9 +230,18 @@ public:
     bool getUseSettings() { return mUseSettings; }
 
     /**
-     * @brief Returns @c true if engine is paused, e.g. when the in-game menu is open.
-     *
-     */
+    *  @brief Sets the cloud_data config varaible.
+    */
+    void setCloudDataEnabled(bool value) {  mCloudDataEnabled = value;  }
+
+    /**
+    *  @brief Gets the cloud_data variable.
+    */
+    bool cloudDataEnabled() {  return mCloudDataEnabled;  }
+
+    /**
+    * @brief Returns @c true if engine is paused, e.g. when the in-game menu is open.
+    */
     Q_INVOKABLE bool isPaused() const { return mPausedRefCount != 0; }
 
     /**
@@ -717,7 +726,8 @@ private:
     bool mFullscreen = true;
     bool mDefaultLevelPath = true;
     int  defaultW = 600, defaultH = 420;
-    bool mSoundsMuted = false;
+    bool mCloudDataEnabled = false;
+    bool  mSoundsMuted = false;
     qreal mMusicVol = 1.0;
     qreal mSfxVol = 1.0;
     // The game starts paused.

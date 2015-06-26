@@ -21,6 +21,7 @@ class AILogic;
 class AILogicManager: public Logic
 {
     Q_OBJECT
+
     Q_PROPERTY(QString currentLogic READ getCurrentLogic WRITE setCurrentLogic NOTIFY currentLogicChanged)
 public:
     explicit AILogicManager(QObject* parent = nullptr);

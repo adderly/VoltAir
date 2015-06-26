@@ -48,7 +48,9 @@ void Actor::componentComplete() {
     QQuickItem::componentComplete();
     // Sometimes during load the signal childrenChanged is not called at the right time.
     // Call it now to ensure we find our children.
-    indexChildren();
+    if(mIndexOnComplete) {
+        indexChildren();
+    }
 }
 
 void Actor::invalidateBodyTransform() {
@@ -66,12 +68,24 @@ Body* Actor::getBody() const {
     return mBody;
 }
 
+void Actor::setBody(Body* body)
+{
+    if(body){
+       body->setParent(this);
+       indexChildren();
+    }
+}
+
 ActorProperties* Actor::getProperties(){
     return mProperties;
 }
 
 void Actor::setInventory(ActorInventory* value){
     mInventory = value;
+}
+
+void Actor::setIndexOnComplete(bool value){
+    mIndexOnComplete = value;
 }
 
 QObject* Actor::findChildByTypeName(const QString& typeName) {
@@ -84,6 +98,16 @@ QObject* Actor::findChildByTypeName(const QString& typeName) {
     const QMetaObject* metadata = QMetaType::metaObjectForType(typeId);
 
     return findChildByType(this, *metadata);
+}
+
+bool Actor::isActorTypeFromBody(Body* body, Actor::ActorType type)
+{
+   Actor* actor = body->getActor();
+   if(actor && actor->getActorType() == type){
+       return true;
+   }else{
+       return false;
+   }
 }
 
 // TODO: See if this function can be implemented more efficiently
@@ -104,12 +128,13 @@ QObject* Actor::findChildByType(QObject* item, const QMetaObject& metadata) {
 
 void Actor::indexChildren() {
     mBody = findChild<Body*>();
-
+#ifdef D_PARSE
     qDebug() << " Component complete ";
+#endif
     mProperties = findChild<ActorProperties*>();
-
+#ifdef D_PARSE
    qDebug() << (mProperties ? "ActorProperties yay!":" No ActorProperties -__-");
-
+#endif
    mInventory = findChild<ActorInventory*>();
     if(mInventory){
         mInventory->indexContents();

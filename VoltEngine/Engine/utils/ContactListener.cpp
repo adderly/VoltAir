@@ -48,6 +48,10 @@ void ContactListener::EndContact(b2Contact* contact) {
     }
 }
 
+void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
+    Body::preSolveContact(contact,oldManifold);
+}
+
 Body* ContactListener::getBodyFromFixture(const b2Fixture* fixture) {
     return static_cast<Body*> (fixture->GetBody()->GetUserData());
 }

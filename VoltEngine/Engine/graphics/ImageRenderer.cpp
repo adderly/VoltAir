@@ -36,6 +36,11 @@ ImageRenderer::ImageRenderer(QQuickItem* parent) : Graphic(parent) {
 ImageRenderer::~ImageRenderer() {
 }
 
+void ImageRenderer::setCentered(bool value){
+    mCentered = value;
+    emit centeredChanged();
+}
+
 void ImageRenderer::setVisible(bool value) {
     mVisible = value;
     updateVisibility();
@@ -103,10 +108,6 @@ void ImageRenderer::updateLocalBoundingBox() {
             textureAspectRatio = 1;
         }
     }
-
-//    qDebug() << mSource << " Bounds = " << bounds;
-
-
     mLocalBoundingBox = bounds;
     mTextureAspectRatio = textureAspectRatio;
 }
@@ -181,7 +182,7 @@ void ImageRenderer::synchronizeForRendering(RenderList* renderList) {
             // textures, we did it in a funny way. We should consider fixing these
             // (difficult).
             float offsetAmount = (1.0f - mTextureAspectRatio) * 0.5f * mSizeScale * mAspectRatio;
-            if (offsetAmount != 0.0f) {
+            if (offsetAmount != 0.0f && !mCentered) {
                 // The offset we apply needs to be rotated from the y-axis into rotated space.
                 float angleCos = renderParams.rotation == 0.0f ? 1.0f : qCos(renderParams.rotation);
                 float angleSin = renderParams.rotation == 0.0f ? 0.0f : qSin(renderParams.rotation);

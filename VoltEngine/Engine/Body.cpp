@@ -21,6 +21,7 @@
 #include "Engine.h"
 #include "Joint.h"
 #include "Level.h"
+#include "ContactListener.h"
 #include "utils/Box2dUtil.h"
 #include "utils/Util.h"
 
@@ -77,6 +78,10 @@ Actor* Body::getActor() const {
         mActor = qobject_cast<Actor*>(parent());
     }
     return mActor;
+}
+
+void Body::setContactManifold(ContactManifold *cont){
+    mContactManifold = cont;
 }
 
 void Body::setMaskBits(unsigned short bits){
@@ -144,6 +149,11 @@ void Body::setMagnetic(bool value) {
 void Body::setMagneticStrength(float value) {
     mMagneticStrength = value;
     emit magneticStrengthChanged();
+}
+
+void Body::setFixedRotation(bool value){
+    mFixedRotation = value;
+    emit fixedRotationChanged();
 }
 
 void Body::setBullet(bool value){
@@ -225,6 +235,7 @@ b2BodyDef Body::getBodyDef() {
         bodyDef.linearDamping = 0.0f;
         bodyDef.angularDamping = 0.0f;
         bodyDef.gravityScale = 1.0f;
+        bodyDef.fixedRotation = mFixedRotation;
         bodyDef.bullet = mBullet;
 
         // Default dynamic properties
@@ -307,6 +318,11 @@ void Body::updateBeforePhysics() {
             QPointF pos = actor->position();
             mBody->SetTransform(b2Vec2(pos.x(), pos.y()), qDegreesToRadians(actor->rotation()));
         }
+//        else{
+            //this is for when no parent is present, the Body must fallow
+            // the b2Body.
+//            this->setPosition(Box2dUtil::toQPointF(mBody->GetPosition()));
+//        }
         mTransformDirty = false;
     }
 }
@@ -451,12 +467,27 @@ int Body::countJoints(QQmlListProperty<Joint>* property) {
 
 //TODO: use c++ pointer container.
 // Also, set the body's property to the b2body's.
-Body *Body::BodyFromb2Body(b2Body *b2body){
+Body *Body::BodyFromb2Body(b2Body *b2body, bool actorLess){
     Body *body = new Body(b2body,false);
     if(body){
         body->setCreatedFromB2Body(true);
+        if(actorLess){
+            body->setPosition(Box2dUtil::toQPointF(b2body->GetPosition()));
+        }
     }
     return body;
+}
+
+void Body::preSolveContact(b2Contact* contact, const b2Manifold* oldManifold)
+{
+    Body* bodyA = EngineUtils::ContactListener::getBodyFromFixture(contact->GetFixtureA());
+    Body* bodyB = EngineUtils::ContactListener::getBodyFromFixture(contact->GetFixtureB());
+    if(Actor::isActorTypeFromBody(bodyA,Actor::PlayerActor)){
+        //contact->SetEnabled(false);
+    }else{
+
+    }
+
 }
 
 void Body::forEachFixture(const std::function<void (b2Fixture*)>& func) {
@@ -494,8 +525,7 @@ void Body::applyForceToCenter(const QPointF& force) {
     mBody->ApplyForceToCenter(b2Vec2(force.x(), force.y()), true);
 }
 
-void Body::setManualInitialization(bool value)
-{
+void Body::setManualInitialization(bool value){
      mManualInitilization = value;
      emit manualInitializationChanged();
 }
