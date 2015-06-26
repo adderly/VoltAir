@@ -31,7 +31,14 @@ android {
 } else:unix {
     copyCommand =
     for(deploymentfolder, DEPLOYMENTFOLDERS) {
-        source = $$PWD/$$eval($${deploymentfolder}.source)
+        flags = $$eval($${deploymentfolder}.flags)
+
+        !isEqual(flags,"GAME"){
+             source = $$PWD/$$eval($${deploymentfolder}.source)
+        } else {
+             source = $$_PRO_FILE_PWD_/$$eval($${deploymentfolder}.source)
+        }
+
         source = $$replace(source, \\\\, /)
         macx {
             target = $$OUT_PWD/$${TARGET}.app/Contents/Resources/$$eval($${deploymentfolder}.target)
@@ -42,6 +49,9 @@ android {
         sourcePathSegments = $$split(source, /)
         targetFullPath = $$target/$$last(sourcePathSegments)
         targetFullPath ~= s,/\\.?/,/,
+        message($$source)
+        message($$targetFullPath)
+        message($$flags)
         !isEqual(source,$$targetFullPath) {
             !isEmpty(copyCommand):copyCommand += &&
             copyCommand += $(MKDIR) \"$$target\"

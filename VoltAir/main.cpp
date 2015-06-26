@@ -28,6 +28,7 @@
 #include <Engine/bodies/CircleBody.h>
 #include <Engine/bodies/PolygonBody.h>
 #include <Engine/graphics/AnimatedImageRenderer.h>
+#include <Engine/graphics/AnimatedImageClip.h>
 #include <Engine/graphics/ImageRenderer.h>
 #include <Engine/graphics/ParallaxTransformItem.h>
 #include <Engine/graphics/ParticleRendererItem.h>
@@ -48,23 +49,31 @@
 #include <Engine/particles/ParticleLayer.h>
 #include <Engine/utils/DebugMetricsMonitor.h>
 #include <Engine/utils/QmlUtil.h>
+#include <Engine/editor/Editor.h>
+#include <Engine/editor/EditorRootItem.h>
+#include <Engine/editor/ResizeControl.h>
 #include <QDir>
 #include <QtGui/QGuiApplication>
 #include "Game.h"
-#include "editor/editor.h"
 #include "LevelProgression.h"
 #include "LevelProgressionList.h"
 #include "QmlConstants.h"
 #include "UiInternal.h"
+#include "GameNodes/inputs/PlayerManager.h"
 #include "logics/AcceleratorLogic.h"
 #include "logics/ActorEmitterLogic.h"
-#include "logics/GameInputLogic.h"
+#include "GameNodes/logics/GameInputLogic.h"
 #include "logics/MagneticAttractorLogic.h"
 #include "logics/MagneticHighlightLogic.h"
 #include "logics/ParticleEmitterLogic.h"
-#include "logics/PickupLogic.h"
+#include "GameNodes/logics/PickupLogic.h"
 #include "logics/RollingMovementLogic.h"
 #include "logics/WaterBodyLogic.h"
+#include "GameNodes/logics/FollowLogic.h"
+
+#if defined(LIQUIDFUN_EXTERNAL_LANGUAGE_API)
+#define LIQUIDFUN_EXTERNAL_LANGUAGE_API 1
+#endif
 
 static QObject* getEngineInstance(QQmlEngine*, QJSEngine*) {
     return Engine::getInstance();
@@ -127,6 +136,7 @@ int main(int argc, char* argv[]) {
 
     // graphics
     qmlRegisterType<AnimatedImageRenderer>(QML_LIBSTR, 1, 0, "AnimatedImageRenderer");
+    qmlRegisterType<AnimatedImageClip>(QML_LIBSTR, 1, 0, "AnimatedImageClip");
     qmlRegisterType<ImageRenderer>(QML_LIBSTR, 1, 0, "ImageRenderer");
     qmlRegisterType<ParallaxTransformItem>(QML_LIBSTR, 1, 0, "ParallaxTransformItem");
     qmlRegisterType<ParticleRendererItem>(QML_LIBSTR, 1, 0, "ParticleRendererItem");
@@ -156,6 +166,7 @@ int main(int argc, char* argv[]) {
     qmlRegisterType<RollingMovementLogic>(QML_LIBSTR, 1, 0, "RollingMovementLogic");
     qmlRegisterType<StopwatchLogic>(QML_LIBSTR, 1, 0, "StopwatchLogic");
     qmlRegisterType<WaterBodyLogic>(QML_LIBSTR, 1, 0, "WaterBodyLogic");
+    qmlRegisterType<FollowLogic>(QML_LIBSTR, 1, 0, "FollowLogic");
 
     // particles
     qmlRegisterType<ParticleLayer>(QML_LIBSTR, 1, 0, "ParticleLayer");
@@ -178,6 +189,11 @@ int main(int argc, char* argv[]) {
     qmlRegisterSingletonType<Joints>(QML_LIBSTR, 1, 0, "Joints", getJointsInstance);
     qmlRegisterSingletonType<QmlUtil>(QML_LIBSTR, 1, 0, "Util", getQmlUtilInstance);
 
+    //editor
+    qmlRegisterType<EditorRootItem>(QML_LIBSTR, 1, 0, "EditorRoot");
+    qmlRegisterType<ResizeControl>(QML_LIBSTR, 1, 0, "ResizeControl");
+
+
     // Add in all our Actor QML files.
     registerQmlFilesInDir("qml", QML_LIBSTR);
     registerQmlFilesInDir("qml/actors", QML_LIBSTR);
@@ -185,17 +201,20 @@ int main(int argc, char* argv[]) {
 
 
     Engine* engine  = Engine::getInstance();
-    engine->setDefaultEngineQml("qml/editor/EditorWidget.qml");
-    engine->setFindRootByName(true);
+    engine->setFullscreen(false);
+//    engine->setDefaultEngineQml("qml/editor/EditorWidget.qml");
+//    engine->setFindRootByName(true);
     engine->init();
+
+    //Workaround for the changes in the Game class.
+    PlayerManager::getInstance();
 
 
     Game* game = Game::getInstance();
-    game->setProgressionLevelPath(QString("qml/VoltAirLevelProgressionList.qml"));
+    //game->setProgressionLevelPath(QString("qml/VoltAirLevelProgressionList.qml"));
     game->init();
 
-   // Editor* editor = Editor::getInstance();
-   // Editor::getInstance()->init();
+//    Editor::getInstance()->init();
 
     return app.exec();
 }

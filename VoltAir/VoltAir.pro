@@ -17,79 +17,47 @@
 # Add more folders to ship with the application, here
 # TODO: This manner of handling deployment folders needs some love. Sub-projects that want to deploy
 # folders must make sure their var names don't collide with these.
+TEMPLATE=app
 assets_folder.source = assets
 assets_folder.target = .
 qml_folder.source = qml
 qml_folder.target = .
-DEPLOYMENTFOLDERS = assets_folder qml_folder
+DEPLOYMENTFOLDERS += assets_folder qml_folder
 
-defined ( LIQUIDFUN ) {
-    LIQUIDFUN_DIR = $$(LIQUIDFUN)
-} else {
-    # TODO: change to "liquidfun" for release.
-    LIQUIDFUN_DIR = ../third_party/liquidfun/liquidfun
-}
+INCLUDEPATH += $$PWD \
+    $$PWD/src   \
+    $$PWD/../VoltEngine
 
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH +=
-
-CONFIG += c++11
-QT += multimedia qml quick
-DEFINES += GL_GLEXT_PROTOTYPES
+DEFINES += BOX2D_LOADER
+DEFINES += QML_BOX2D
+DEFINES += LIQUIDFUN_EXTERNAL_LANGUAGE_API
+DEFINES += EXT_COMPONENTS
+DEFINES += EXT_MODELS
 
 HEADERS += \
-    DebugManager.h \
     Doxygen.h \
-    Game.h \
-    LevelProgression.h \
-    LevelProgressionList.h \
-    PlayerProfile.h \
-    QmlConstants.h \
-    UiInternal.h \
-    inputs/PlayerManager.h \
-    logics/AcceleratorLogic.h \
-    logics/ActorEmitterLogic.h \
-    logics/EmitterLogic.h \
-    logics/GameInputLogic.h \
-    logics/MagneticAttractorLogic.h \
-    logics/MagneticHighlightLogic.h \
-    logics/ParticleEmitterLogic.h \
-    logics/PickupLogic.h \
-    logics/RollingMovementLogic.h \
-    logics/WaterBodyLogic.h \
-
-INCLUDEPATH += \
-    $$LIQUIDFUN_DIR/Box2D \
 
 SOURCES += \
-    DebugManager.cpp \
-    Game.cpp \
-    LevelProgression.cpp \
-    LevelProgressionList.cpp \
-    PlayerProfile.cpp \
-    UiInternal.cpp \
-    inputs/PlayerManager.cpp \
-    logics/AcceleratorLogic.cpp \
-    logics/ActorEmitterLogic.cpp \
-    logics/EmitterLogic.cpp \
-    logics/GameInputLogic.cpp \
-    logics/MagneticAttractorLogic.cpp \
-    logics/MagneticHighlightLogic.cpp \
-    logics/ParticleEmitterLogic.cpp \
-    logics/PickupLogic.cpp \
-    logics/RollingMovementLogic.cpp \
-    logics/WaterBodyLogic.cpp \
     main.cpp \
 
-include(Engine/Engine.pri)
-include(GameInput/GameInput.pri)
-include(renderer/Renderer.pri)
+INCLUDEPATH += ../third_party/liquidfun/liquidfun/Box2D/
+INCLUDEPATH += ../third_party/liquidfun/liquidfun/Box2D/Box2D
 
-include(deployment.pri)
+include(VoltAir.pri)
 
-RESOURCES += \
+OTHER_FILES += \
+    ../VoltEngine/Engine/android/deploy/src/com/google/fpl/utils/* \
+    ../VoltEngine/Engine/android/deploy/src/com/google/fpl/voltair/* \
+    ../VoltEngine/Engine/android/deploy/res/values/*
 
-cache()
 
 DISTFILES += \
-    qml/editor/TopMenuBar.qml
+    ../VoltEngine/Engine/android/deploy/gradle/wrapper/gradle-wrapper.jar \
+    ../VoltEngine/Engine/android/deploy/AndroidManifest.xml \
+    ../VoltEngine/Engine/android/deploy/gradlew.bat \
+    ../VoltEngine/Engine/android/deploy/res/values/libs.xml \
+    ../VoltEngine/Engine/android/deploy/build.gradle \
+    ../VoltEngine/Engine/android/deploy/gradle/wrapper/gradle-wrapper.properties \
+    ../VoltEngine/Engine/android/deploy/gradlew
+
+

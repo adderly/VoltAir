@@ -103,6 +103,7 @@ UiComponent {
     DebugHud {
         id: debugHud
         objectName: "debugHud"
+        debugRendererVisible: true
 
         anchors.fill: parent
     }

@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import VoltAir 2.0
+import VoltAir 1.0
 
 /**
 *   Template ui internal for new game.
@@ -31,7 +31,7 @@ UiInternal
         /**
          * @brief type:SinglePlayerHud Reference to the single player HUD.
          */
-        property alias singlePlayerHud: singlePlayerHud
+        //property alias singlePlayerHud: singlePlayerHud
 
        /**
         *   @brief property

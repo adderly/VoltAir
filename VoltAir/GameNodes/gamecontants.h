@@ -1,0 +1,5 @@
+#ifndef GAMECONTANTS
+#define GAMECONTANTS
+
+#endif // GAMECONTANTS
+

@@ -3,4 +3,10 @@
 	url = https://github.com/google/liquidfun.git
 [submodule "third_party/qml-box2d"]
 	path = third_party/qml-box2d
-	url = https://github.com/adderly/qml-box2d.git
+	url = ../../voptiplex/qml-box2d.git
+[submodule "third_party/components"]
+	path = third_party/components
+	url = ../components.git
+[submodule "third_party/spine-qml"]
+	path = third_party/spine-qml
+	url = ../../irukandji/spine-qml.git
