@@ -18,7 +18,8 @@ HEADERS += \
     $$PWD/logics/EmitterLogic.h \
     $$PWD/logics/ActorEmitterLogic.h \
     $$PWD/logics/AcceleratorLogic.h \
-    $$PWD/gamecontants.h
+    $$PWD/gamecontants.h \
+    $$PWD/gamehelper.h
 
 SOURCES += \
     $$PWD/UiInternal.cpp \
@@ -39,4 +40,5 @@ SOURCES += \
     $$PWD/logics/MagneticAttractorLogic.cpp \
     $$PWD/logics/EmitterLogic.cpp \
     $$PWD/logics/ActorEmitterLogic.cpp \
-    $$PWD/logics/AcceleratorLogic.cpp
+    $$PWD/logics/AcceleratorLogic.cpp \
+    $$PWD/gamehelper.cpp

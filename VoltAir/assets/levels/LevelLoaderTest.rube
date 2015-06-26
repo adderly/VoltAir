@@ -1,0 +1,405 @@
+
+{
+  "collisionbitplanes" : 
+  {
+    "names" : 
+    [
+      "bitplane1",
+      "bitplane2",
+      "bitplane3",
+      "bitplane4",
+      "bitplane5",
+      "bitplane6",
+      "bitplane7",
+      "bitplane8",
+      "bitplane9",
+      "bitplane10",
+      "bitplane11",
+      "bitplane12",
+      "bitplane13",
+      "bitplane14",
+      "bitplane15",
+      "bitplane16",
+      "bitplane17",
+      "bitplane18",
+      "bitplane19",
+      "bitplane20",
+      "bitplane21",
+      "bitplane22",
+      "bitplane23",
+      "bitplane24",
+      "bitplane25",
+      "bitplane26",
+      "bitplane27",
+      "bitplane28",
+      "bitplane29",
+      "bitplane30",
+      "bitplane31",
+      "bitplane32"
+    ]
+  },
+  "metaworld" : 
+  {
+    "allowSleep" : true,
+    "autoClearForces" : true,
+    "continuousPhysics" : true,
+    "exportOptions" : 
+    {
+      "compactCommonFloats" : true,
+      "compactZeroVecs" : true,
+      "saveFullPathForImages" : false,
+      "saveFullPathForSamplerOutput" : false,
+      "saveImagePathsRelativeToRUBEFile" : false,
+      "saveSamplerOutputPathsRelativeToRUBEFile" : false,
+      "useGsonFormat" : false,
+      "useHumanReadableFloats" : true,
+      "usePrettyPrint" : true
+    },
+    "gravity" : 0,
+    "metabody" : 
+    [
+      
+      {
+        "angle" : -1.574963092803955,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 1,
+            "name" : "fixture0",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -0.2217329442501068,
+                0.2217351198196411,
+                0.2217351198196411,
+                -0.2217329442501068
+              ],
+              "y" : 
+              [
+                -4.149580001831055,
+                -4.149580001831055,
+                4.149580001831055,
+                4.149580001831055
+              ]
+            }
+          }
+        ],
+        "id" : 1,
+        "linearVelocity" : 0,
+        "name" : "body1",
+        "position" : 
+        {
+          "x" : -0.01363134384155273,
+          "y" : 5.691398620605469
+        },
+        "type" : "static"
+      },
+      
+      {
+        "angle" : -1.574963092803955,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 2,
+            "name" : "fixture0",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                0.1778144836425781,
+                -0.1778144836425781,
+                -0.1778144836425781,
+                0.1778144836425781
+              ],
+              "y" : 
+              [
+                4.149580955505371,
+                4.149580955505371,
+                -4.149583816528320,
+                -4.149583816528320
+              ]
+            }
+          }
+        ],
+        "id" : 2,
+        "linearVelocity" : 0,
+        "name" : "body3",
+        "position" : 
+        {
+          "x" : -0.06055879592895508,
+          "y" : -5.570819854736328
+        },
+        "type" : "static"
+      },
+      
+      {
+        "angle" : -3.147388935089111,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 3,
+            "name" : "fixture0",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                0.05379152297973633,
+                -0.04913000762462616,
+                -0.05379246920347214,
+                0.04913001134991646
+              ],
+              "y" : 
+              [
+                5.580116271972656,
+                5.580057144165039,
+                -5.580119132995605,
+                -5.580059528350830
+              ]
+            }
+          }
+        ],
+        "id" : 3,
+        "linearVelocity" : 0,
+        "name" : "body2",
+        "position" : 
+        {
+          "x" : 4.140078544616699,
+          "y" : 0.02240562438964844
+        },
+        "type" : "static"
+      },
+      
+      {
+        "angle" : -3.147388935089111,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 4,
+            "name" : "fixture0",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                0.05379211902618408,
+                -0.04913036525249481,
+                -0.05379187315702438,
+                0.04913060739636421
+              ],
+              "y" : 
+              [
+                5.580116271972656,
+                5.580057144165039,
+                -5.580119132995605,
+                -5.580059528350830
+              ]
+            }
+          }
+        ],
+        "id" : 4,
+        "linearVelocity" : 0,
+        "name" : "body4",
+        "position" : 
+        {
+          "x" : -4.173487663269043,
+          "y" : 0.05704641342163086
+        },
+        "type" : "static"
+      },
+      
+      {
+        "active" : false,
+        "angle" : -1.574963092803955,
+        "angularVelocity" : 0,
+        "fixedRotation" : true,
+        "id" : 5,
+        "linearVelocity" : 0,
+        "massData-mass" : 1,
+        "name" : "body0",
+        "position" : 
+        {
+          "x" : 4.053115844726562e-05,
+          "y" : 0.0146179199218750
+        },
+        "type" : "dynamic"
+      },
+      
+      {
+        "active" : false,
+        "angle" : -1.574963092803955,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixedRotation" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 6,
+            "name" : "fixture1",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -8.589141845703125,
+                8.589143753051758,
+                8.589143753051758,
+                -8.589141845703125
+              ],
+              "y" : 
+              [
+                -5.953629493713379,
+                -5.953629493713379,
+                5.953635692596436,
+                5.953635692596436
+              ]
+            }
+          }
+        ],
+        "id" : 7,
+        "linearVelocity" : 0,
+        "name" : "camera_out",
+        "position" : 
+        {
+          "x" : 0.04958534240722656,
+          "y" : -0.1342144012451172
+        },
+        "sleepingAllowed" : false,
+        "type" : "static"
+      },
+      
+      {
+        "angle" : -1.574963092803955,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixedRotation" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 7,
+            "name" : "fixture1",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : 
+              [
+                -5.878007888793945,
+                5.878009796142578,
+                5.878009796142578,
+                -5.878007888793945
+              ],
+              "y" : 
+              [
+                -4.074386596679688,
+                -4.074386596679688,
+                4.074390411376953,
+                4.074390411376953
+              ]
+            }
+          }
+        ],
+        "id" : 8,
+        "linearVelocity" : 0,
+        "name" : "camera",
+        "position" : 
+        {
+          "x" : 0.007486820220947266,
+          "y" : 0.02598524093627930
+        },
+        "sleepingAllowed" : false,
+        "type" : "static"
+      }
+    ],
+    "metaimage" : 
+    [
+      
+      {
+        "aspectScale" : 1,
+        "body" : 5,
+        "center" : 
+        {
+          "x" : 4.768371582031250e-07,
+          "y" : 0.02004194259643555
+        },
+        "file" : "../img/coliseum.png",
+        "filter" : 0,
+        "flip" : false,
+        "id" : 1,
+        "name" : "image0",
+        "opacity" : 1,
+        "renderOrder" : 2,
+        "scale" : 6.999899864196777
+      }
+    ],
+    "positionIterations" : 3,
+    "stepsPerSecond" : 60.0,
+    "subStepping" : false,
+    "velocityIterations" : 8,
+    "warmStarting" : true
+  }
+}
